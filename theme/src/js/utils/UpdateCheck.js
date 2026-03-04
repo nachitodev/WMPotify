@@ -5,7 +5,7 @@ import WindhawkComm from "../WindhawkComm";
 import { openUpdateDialog } from '../ui/dialogs';
 
 const verString = '1.2.5';
-export let lastSupportedSpotifyVer = '1.2.80';
+export let lastSupportedSpotifyVer = '1.2.84';
 
 export class MadVersion {
     constructor(ver) {
