@@ -1,11 +1,9 @@
 import enUS from './lang/en-US.js';
 import koKR from './lang/ko-KR.js';
-import esAR from './lang/es-AR.js';
 
 const supportedLanguages = {
     "en-US": "English",
-    "ko-KR": "한국어",
-    "es-AR": "Español"
+    "ko-KR": "한국어"
 };
 
 let lang = navigator.language;
@@ -25,7 +23,6 @@ if (!(lang in supportedLanguages)) {
 const strings = {
     'en-US': enUS,
     'ko-KR': koKR,
-    'es-AR': esAR
 };
 
 const currentStrings = strings['en-US'];

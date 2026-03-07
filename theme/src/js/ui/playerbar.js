@@ -95,7 +95,7 @@ class PlayerBar {
         const playerControlsRight = document.querySelector('.player-controls__right');
         const volumeBar = document.querySelector('.volume-bar');
         this.volumeButton = volumeBar.querySelector('.volume-bar__icon-button');
-        this.volumeBarProgress = volumeBar.querySelector('.progress-bar, .x-progressBar-progressBar, [data-testid="progress-bar"]');
+        this.volumeBarProgress = volumeBar.querySelector('.progress-bar');
         this.updateVolumeIcon();
         new MutationObserver(this.updateVolumeIcon.bind(this)).observe(this.volumeBarProgress, { attributes: true, attributeFilter: ['style'] });
         playerControlsRight.appendChild(volumeBar);
