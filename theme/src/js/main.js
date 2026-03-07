@@ -49,7 +49,7 @@ const elementsRequired = [
     '.playback-bar [class*=encore-text]',
     '.volume-bar',
     '.volume-bar__icon-button',
-    '.progress-bar, .x-progressBar-progressBar, [data-testid="progress-bar"]',
+    '.volume-bar .progress-bar, .volume-bar .x-progressBar-progressBar, .volume-bar [data-testid="progress-bar"]',
     '.main-nowPlayingBar-left',
 ];
 
