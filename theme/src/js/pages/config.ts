@@ -457,6 +457,9 @@ function init(): void {
 
     whSpeedModSupported = !!whStatus?.speedModSupported;
     elements.speed.addEventListener('pointerup', onSpeedChange);
+    elements.speedSlow.addEventListener('click', setSpeed.bind(null, 0.5));
+    elements.speedNormal.addEventListener('click', setSpeed.bind(null, 1));
+    elements.speedFast.addEventListener('click', setSpeed.bind(null, 1.4));
     const playbackSpeed = Spicetify.Player.origin.getState().speed || 1;
     elements.speedValue.textContent = (Number.isInteger(playbackSpeed) ? playbackSpeed + '.0' : playbackSpeed).toString();
     elements.speedValue.addEventListener('click', async () => {
