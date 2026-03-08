@@ -59,12 +59,17 @@ class WindowManager {
         }, { once: true });
     }
 
+    static isMinWidth = isMinWidth;
     static isMiniMode = isMiniMode;
+}
+
+function isMinWidth() {
+    return window.innerWidth < 360;
 }
 
 function isMiniMode() {
     const isCustomTitlebar = !!document.querySelector('#wmpotify-title-bar');
-    return window.innerWidth < 360 && window.innerHeight < (isCustomTitlebar ? 92 : 62);
+    return isMinWidth() && window.innerHeight < (isCustomTitlebar ? 92 : 62);
 }
 
 function fullscreenMouseMoveListener() {
@@ -87,8 +92,13 @@ function exitFullscreen() {
 }
 
 window.addEventListener('resize', () => {
-    if (localStorage.wmpotifyTopMost === 'minimode') {
-        WindhawkComm.setTopMost(isMiniMode());
+    switch (localStorage.wmpotifyTopMost) {
+        case 'minimode':
+            WindhawkComm.setTopMost(isMiniMode());
+            break;
+        case 'minwidth':
+            WindhawkComm.setTopMost(isMinWidth());
+            break;
     }
 });
 

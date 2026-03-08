@@ -139,6 +139,7 @@ function init(): void {
             <select id="wmpotify-config-topmost" class="wmpotify-aero" disabled>
                 <option value="always">${Strings['CONF_GENERAL_TOPMOST_ALWAYS']}</option>
                 <option value="minimode">${Strings['CONF_GENERAL_TOPMOST_MINIMODE']}</option>
+                <option value="minwidth">${Strings['CONF_GENERAL_TOPMOST_MINWIDTH']}</option>
                 <option value="never" selected>${Strings['CONF_GENERAL_TOPMOST_NEVER']}</option>
             </select>
             <label for="wmpotify-config-backdrop">${Strings['CONF_GENERAL_BACKDROP']}</label>
@@ -472,8 +473,10 @@ function init(): void {
         elements.topmost.value = localStorage.wmpotifyTopMost || 'never';
         elements.topmost.addEventListener('change', () => {
             localStorage.wmpotifyTopMost = elements.topmost.value;
-            if (elements.topmost.value === 'always' || 
-                (elements.topmost.value === 'minimode' && WindowManager.isMiniMode())) {
+            if (elements.topmost.value === 'always' ||
+                (elements.topmost.value === 'minimode' && WindowManager.isMiniMode()) ||
+                (elements.topmost.value === 'minwidth' && WindowManager.isMinWidth())
+            ) {
                 WindhawkComm.setTopMost(true);
             } else {
                 WindhawkComm.setTopMost(false);

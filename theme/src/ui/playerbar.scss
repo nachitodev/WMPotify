@@ -473,6 +473,7 @@ div[data-testid='now-playing-widget'] {
         align-self: center;
         background: var(--vol-mid) no-repeat;
         transform: none !important;
+        will-change: unset;
 
         svg {
             display: none;
@@ -500,7 +501,7 @@ div[data-testid='now-playing-widget'] {
         margin-left: -1px;
 
         .x-progressBar-progressBarBg,
-        .x-progressBar-progressBar { /* 1.2.84 */
+        .x-progressBar-background { /* 1.2.84 */
             border-color: transparent;
             outline-color: transparent;
 
@@ -690,11 +691,10 @@ div[data-testid='now-playing-widget'] {
 }
 
 .x-progressBar-progressBarBg,
-.x-progressBar-progressBar { /* 1.2.84 */
+.x-progressBar-background { /* 1.2.84 */
     background: transparent;
     border: rgba(92, 92, 92, 0.5) 1px solid;
     outline: rgba(255, 255, 255, 0.5) 1px solid;
-    border-radius: 2px;
     forced-color-adjust: none;
 
     .x-progressBar-fillColor,
@@ -716,9 +716,6 @@ div[data-testid='now-playing-widget'] {
         display: none !important;
     }
 
-    .x-progressBar-background { /* 1.2.84 */
-        background: transparent !important;
-    }
     .x-progressBar-middleground { /* 1.2.84 */
         display: none;
     }
@@ -929,7 +926,7 @@ div[data-testid='now-playing-widget'] {
     }
 
     .x-progressBar-progressBarBg,
-    .x-progressBar-progressBar { /* 1.2.84 */
+    .x-progressBar-background { /* 1.2.84 */
         border-color: transparent;
         outline-color: transparent;
     }
@@ -1185,7 +1182,7 @@ body[data-right-align-pb-left-btn] {
                 z-index: 99;
 
                 .x-progressBar-progressBarBg,
-                .x-progressBar-progressBar { /* 1.2.84 */
+                .x-progressBar-background { /* 1.2.84 */
                     width: 64px;
                     margin-top: -3px;
                     margin-left: 13px;

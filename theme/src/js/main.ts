@@ -69,7 +69,10 @@ function earlyInit() {
     const whInitialOpts: WindhawkModOptions | undefined = WindhawkComm.module?.initialOptions;
 
     if (whStatus) {
-        if (localStorage.wmpotifyTopMost === 'always' || (localStorage.wmpotifyTopMost === 'minimode' && WindowManager.isMiniMode())) {
+        if (localStorage.wmpotifyTopMost === 'always' ||
+            (localStorage.wmpotifyTopMost === 'minimode' && WindowManager.isMiniMode()) ||
+            (localStorage.wmpotifyTopMost === 'minwidth' && WindowManager.isMinWidth())
+        ) {
             WindhawkComm.setTopMost(true);
         } else {
             WindhawkComm.setTopMost(false);

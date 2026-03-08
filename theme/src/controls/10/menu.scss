@@ -75,8 +75,8 @@
             display: none;
           }
 
-          /* 1.2.84 added this class to list view style bottom buttons, exclude those */
-          .main-contextMenu-menuItemButton:not(.YrVXiSMvnPFGqwDCePCf) {
+          /* 1.2.84 added this class to list view style bottom buttons, and audio quality selection menu, exclude those */
+          .main-contextMenu-menuItemButton:not(.YrVXiSMvnPFGqwDCePCf):not(.bZu9z5uN3CYG_zTFA97L):not(.CgGNDh1suyDyp2D3Azit) {
             height: 24px;
 
             span {
@@ -94,6 +94,11 @@
           [class*="Box-group-naked-listRow-minBlockSize"] {
             min-block-size: 0;
             padding: 2px 0 2px 22px;
+          }
+
+          /* Add to playlist menu */
+          [style*="context-menu-submenu-length"] {
+            height: unset;
           }
 
           > a,
