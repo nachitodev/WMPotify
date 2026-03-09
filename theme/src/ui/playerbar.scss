@@ -1171,7 +1171,8 @@ body[data-right-align-pb-left-btn] {
             height: 25px;
             background: var(--vol-mini-expand) no-repeat;
 
-            .playback-progressbar {
+            .playback-progressbar,
+            .x-progressBar-wrapper { /* 1.2.84 */
                 display: none;
                 position: absolute;
                 width: 102px;
@@ -1193,11 +1194,11 @@ body[data-right-align-pb-left-btn] {
                 }
             }
 
-            &:hover:not(:has(.playback-progressbar:hover)) {
+            &:hover:not(:has(.playback-progressbar:hover)):not(:has(.x-progressBar-wrapper:hover)) {
                 background-image: var(--vol-mini-expand-extrahover);
             }
 
-            &:active:not(:has(.playback-progressbar:active)) {
+            &:active:not(:has(.playback-progressbar:active)):not(:has(.x-progressBar-wrapper:active)) {
                 background-image: var(--vol-mini-expand-pressed);
             }
         }
@@ -1228,7 +1229,7 @@ body[data-right-align-pb-left-btn] {
             }
         }
 
-        &:has(.volume-bar__slider-container:hover):not(:has(.playback-progressbar:hover)) .volume-bar__icon-button::before {
+        &:has(.volume-bar__slider-container:hover):not(:has(.playback-progressbar:hover)):not(:has(.x-progressBar-wrapper:hover)) .volume-bar__icon-button::before {
             background-image: var(--vol-mini-hover);
         }
     }
