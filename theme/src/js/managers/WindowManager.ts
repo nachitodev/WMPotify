@@ -1,9 +1,9 @@
 'use strict';
 
 import Config from "../pages/config";
-import WindhawkComm from "../WindhawkComm";
+import WindhawkComm from "../utils/WindhawkComm";
 
-let fullscreenHideControlTimer = null;
+let fullscreenHideControlTimer: number | null = null;
 
 class WindowManager {
     static toggleMiniMode() {
@@ -19,7 +19,7 @@ class WindowManager {
             if (document.fullscreenElement) {
                 document.exitFullscreen();
             }
-            if (WindhawkComm.query().isMaximized) {
+            if (WindhawkComm.query()!.isMaximized) {
                 WindhawkComm.maximizeRestore();
             }
             localStorage.wmpotifyPreMiniModeSize = [window.outerWidth, window.outerHeight];
@@ -36,7 +36,7 @@ class WindowManager {
                 Spicetify.Platform.History.push({ pathname: '/wmpvis' });
             } else {
                 const lyricsButton = document.querySelector('.main-nowPlayingBar-extraControls button[data-testid="lyrics-button"]');
-                if (lyricsButton) {
+                if (lyricsButton && lyricsButton instanceof HTMLButtonElement) {
                     lyricsButton.click();
                 }
             }
@@ -59,12 +59,17 @@ class WindowManager {
         }, { once: true });
     }
 
+    static isMinWidth = isMinWidth;
     static isMiniMode = isMiniMode;
+}
+
+function isMinWidth() {
+    return window.innerWidth < 360;
 }
 
 function isMiniMode() {
     const isCustomTitlebar = !!document.querySelector('#wmpotify-title-bar');
-    return window.innerWidth < 360 && window.innerHeight < (isCustomTitlebar ? 92 : 62);
+    return isMinWidth() && window.innerHeight < (isCustomTitlebar ? 92 : 62);
 }
 
 function fullscreenMouseMoveListener() {
@@ -73,7 +78,9 @@ function fullscreenMouseMoveListener() {
         return;
     }
     document.body.classList.add('wmpotify-playerbar-visible');
-    clearTimeout(fullscreenHideControlTimer);
+    if (fullscreenHideControlTimer) {
+        clearTimeout(fullscreenHideControlTimer);
+    }
     fullscreenHideControlTimer = setTimeout(() => {
         document.body.classList.remove('wmpotify-playerbar-visible');
     }, 2000);
@@ -85,8 +92,13 @@ function exitFullscreen() {
 }
 
 window.addEventListener('resize', () => {
-    if (localStorage.wmpotifyTopMost === 'minimode') {
-        WindhawkComm.setTopMost(isMiniMode());
+    switch (localStorage.wmpotifyTopMost) {
+        case 'minimode':
+            WindhawkComm.setTopMost(isMiniMode());
+            break;
+        case 'minwidth':
+            WindhawkComm.setTopMost(isMinWidth());
+            break;
     }
 });
 

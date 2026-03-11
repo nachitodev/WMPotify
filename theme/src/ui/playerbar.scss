@@ -473,6 +473,7 @@ div[data-testid='now-playing-widget'] {
         align-self: center;
         background: var(--vol-mid) no-repeat;
         transform: none !important;
+        will-change: unset;
 
         svg {
             display: none;
@@ -499,7 +500,8 @@ div[data-testid='now-playing-widget'] {
         width: 67px;
         margin-left: -1px;
 
-        .x-progressBar-progressBarBg {
+        .x-progressBar-progressBarBg,
+        .x-progressBar-background { /* 1.2.84 */
             border-color: transparent;
             outline-color: transparent;
 
@@ -508,7 +510,12 @@ div[data-testid='now-playing-widget'] {
             }
         }
 
-        .progress-bar__slider {
+        .D3ukq4oRWEkyLsWPYziv { /* 1.2.83 */
+            display: none !important;
+        }
+
+        .progress-bar__slider,
+        .x-progressBar-handle { /* 1.2.84 */
             background: var(--volhandle) no-repeat;
             width: 12px;
             height: 13px;
@@ -683,13 +690,15 @@ div[data-testid='now-playing-widget'] {
     }
 }
 
-.x-progressBar-progressBarBg {
+.x-progressBar-progressBarBg,
+.x-progressBar-background { /* 1.2.84 */
     background: transparent;
     border: rgba(92, 92, 92, 0.5) 1px solid;
     outline: rgba(255, 255, 255, 0.5) 1px solid;
     forced-color-adjust: none;
 
-    .x-progressBar-fillColor {
+    .x-progressBar-fillColor,
+    .x-progressBar-foreground { /* 1.2.84 */
         background: var(--pbfill) !important;
         height: 3px;
 
@@ -703,7 +712,16 @@ div[data-testid='now-playing-widget'] {
         }
     }
 
-    .progress-bar__slider {
+    .D3ukq4oRWEkyLsWPYziv { /* 1.2.83 */
+        display: none !important;
+    }
+
+    .x-progressBar-middleground { /* 1.2.84 */
+        display: none;
+    }
+
+    .progress-bar__slider,
+    .x-progressBar-handle { /* 1.2.84 */
         border-radius: 0;
         background: var(--seekhandle) no-repeat;
         width: 16px;
@@ -907,7 +925,8 @@ div[data-testid='now-playing-widget'] {
         bottom: 57px;
     }
 
-    .x-progressBar-progressBarBg {
+    .x-progressBar-progressBarBg,
+    .x-progressBar-background { /* 1.2.84 */
         border-color: transparent;
         outline-color: transparent;
     }
@@ -1152,7 +1171,8 @@ body[data-right-align-pb-left-btn] {
             height: 25px;
             background: var(--vol-mini-expand) no-repeat;
 
-            .playback-progressbar {
+            .playback-progressbar,
+            .x-progressBar-wrapper { /* 1.2.84 */
                 display: none;
                 position: absolute;
                 width: 102px;
@@ -1162,7 +1182,8 @@ body[data-right-align-pb-left-btn] {
                 background: url('resources/playerbar/vol_popup_bg.png') no-repeat;
                 z-index: 99;
 
-                .x-progressBar-progressBarBg {
+                .x-progressBar-progressBarBg,
+                .x-progressBar-background { /* 1.2.84 */
                     width: 64px;
                     margin-top: -3px;
                     margin-left: 13px;
@@ -1173,11 +1194,11 @@ body[data-right-align-pb-left-btn] {
                 }
             }
 
-            &:hover:not(:has(.playback-progressbar:hover)) {
+            &:hover:not(:has(.playback-progressbar:hover)):not(:has(.x-progressBar-wrapper:hover)) {
                 background-image: var(--vol-mini-expand-extrahover);
             }
 
-            &:active:not(:has(.playback-progressbar:active)) {
+            &:active:not(:has(.playback-progressbar:active)):not(:has(.x-progressBar-wrapper:active)) {
                 background-image: var(--vol-mini-expand-pressed);
             }
         }
@@ -1208,7 +1229,7 @@ body[data-right-align-pb-left-btn] {
             }
         }
 
-        &:has(.volume-bar__slider-container:hover):not(:has(.playback-progressbar:hover)) .volume-bar__icon-button::before {
+        &:has(.volume-bar__slider-container:hover):not(:has(.playback-progressbar:hover)):not(:has(.x-progressBar-wrapper:hover)) .volume-bar__icon-button::before {
             background-image: var(--vol-mini-hover);
         }
     }
@@ -1294,7 +1315,8 @@ body[data-right-align-pb-left-btn] {
         --pause-31-pressed: var(--pause-pressed);
     }
 
-    .progress-bar__slider {
+    .progress-bar__slider,
+    .x-progressBar-handle { /* 1.2.84 */
         visibility: visible;
         box-shadow: none;
     }

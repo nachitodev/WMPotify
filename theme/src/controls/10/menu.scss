@@ -75,7 +75,8 @@
             display: none;
           }
 
-          .main-contextMenu-menuItemButton {
+          /* 1.2.84 added this class to list view style bottom buttons, and audio quality selection menu, exclude those */
+          .main-contextMenu-menuItemButton:not(.YrVXiSMvnPFGqwDCePCf):not(.bZu9z5uN3CYG_zTFA97L):not(.CgGNDh1suyDyp2D3Azit) {
             height: 24px;
 
             span {
@@ -93,6 +94,11 @@
           [class*="Box-group-naked-listRow-minBlockSize"] {
             min-block-size: 0;
             padding: 2px 0 2px 22px;
+          }
+
+          /* Add to playlist menu */
+          [style*="context-menu-submenu-length"] {
+            height: unset;
           }
 
           > a,
@@ -182,7 +188,8 @@
               content: none;
             }
 
-            span:not(:first-child) {
+            span:not(:first-child),
+            div:not(:first-child) > span { /* 1.2.84 */
               svg:has(path[d="M14 10 8 4l-6 6h12z"]),
               svg:has(path[d="M14 10 8 4l-6 6z"]) {
                 /* submenu mark */
@@ -265,6 +272,10 @@
               display: none;
             }
           }
+        }
+
+        div[style*="view-menu-selected-offset"]::before {
+          display: none !important;
         }
 
         /* Hide the bottom separator if there is no menu below */

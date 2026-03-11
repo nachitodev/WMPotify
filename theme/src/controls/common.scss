@@ -363,8 +363,11 @@
             }
         }
 
-        [class*=LineClamp]:has(.NUoUlYHQoMKe6r7dL2Hg) {
-            display: none;
+        [class*=LineClamp] {
+            &:has(.NUoUlYHQoMKe6r7dL2Hg),
+            &:has(.Wmr5qZ5jui6X37XCrChA) {
+                display: none;
+            }
         }
     }
 }

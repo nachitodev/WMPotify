@@ -110,6 +110,7 @@ const lang = {
     'CONF_GENERAL_TOPMOST': '항상 위에 표시',
     'CONF_GENERAL_TOPMOST_ALWAYS': '항상',
     'CONF_GENERAL_TOPMOST_MINIMODE': '미니 모드에서',
+    'CONF_GENERAL_TOPMOST_MINWIDTH': '최소 폭일 때',
     'CONF_GENERAL_TOPMOST_NEVER': '안함',
     'CONF_GENERAL_BACKDROP': '배경 재질',
     'CONF_GENERAL_BACKDROP_NONE': '없음',

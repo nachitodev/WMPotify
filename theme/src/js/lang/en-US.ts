@@ -110,6 +110,7 @@ const lang = {
     'CONF_GENERAL_TOPMOST': 'Always on top',
     'CONF_GENERAL_TOPMOST_ALWAYS': 'Always',
     'CONF_GENERAL_TOPMOST_MINIMODE': 'In mini mode',
+    'CONF_GENERAL_TOPMOST_MINWIDTH': 'In mini width',
     'CONF_GENERAL_TOPMOST_NEVER': 'Never',
     'CONF_GENERAL_BACKDROP': 'Backdrop',
     'CONF_GENERAL_BACKDROP_NONE': 'None',
