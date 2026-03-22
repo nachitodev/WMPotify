@@ -5,20 +5,39 @@ import { formatTime } from '../utils/functions';
 import WindhawkComm from '../utils/WindhawkComm';
 import WindowManager from '../managers/WindowManager';
 
+interface HTMLButtonElementWithTippy extends HTMLButtonElement {
+    _tippy: {
+        setContent: (content: string) => void;
+    }
+}
+
 class PlayerBar {
+    playerBar: HTMLDivElement;
+    timeTexts: NodeListOf<HTMLSpanElement>;
+    timeTextContainer: HTMLDivElement;
+    timeText: HTMLSpanElement;
+    timeTextMode: number;
+    volumeButton: HTMLButtonElement;
+    volumeBarProgress: HTMLElement;
+    titlebar: HTMLDivElement;
+    titleButtons: HTMLDivElement;
+    titleSet: boolean = false;
+    longPressTimer: number = -1;
+
     constructor() {
-        this.playerBar = document.querySelector('.main-nowPlayingBar-nowPlayingBar');
+        this.playerBar = document.querySelector('.main-nowPlayingBar-nowPlayingBar')!;
 
         this.setupTrackInfoWidget();
-        new MutationObserver(this.setupTrackInfoWidget.bind(this)).observe(document.querySelector('.main-nowPlayingBar-left'), { childList: true });
+        const npvLeft = document.querySelector<HTMLElement>('.main-nowPlayingBar-left')!;
+        new MutationObserver(this.setupTrackInfoWidget.bind(this)).observe(npvLeft, { childList: true });
 
-        const playerControlsLeft = document.querySelector('.player-controls__left');
+        const playerControlsLeft = document.querySelector('.player-controls__left')!;
         const repeatButton = document.createElement('button');
         const repeatLabels = ['playback-control.enable-repeat', 'playback-control.enable-repeat-one', 'playback-control.disable-repeat'];
         const currentRepeat = Spicetify.Player.getRepeat();
         const currentLabel = Spicetify.Platform.Translations[repeatLabels[currentRepeat]];
         repeatButton.setAttribute('aria-label', currentLabel);
-        repeatButton.setAttribute('aria-checked', !!currentRepeat);
+        repeatButton.setAttribute('aria-checked', (!!currentRepeat).toString());
         repeatButton.id = 'wmpotify-repeat-button';
         repeatButton.addEventListener('click', () => {
             Spicetify.Player.toggleRepeat();
@@ -28,17 +47,17 @@ class PlayerBar {
             content: currentLabel
         });
         Spicetify.Platform.PlayerAPI._events.addListener("update", ({ data }) => {
-            repeatButton.setAttribute('aria-checked', !!data.repeat);
+            repeatButton.setAttribute('aria-checked', (!!data.repeat).toString());
             const newLabel = Spicetify.Platform.Translations[repeatLabels[data.repeat]];
             repeatButton.setAttribute('aria-label', newLabel);
-            repeatButton._tippy.setContent(newLabel);
+            (repeatButton as HTMLButtonElementWithTippy)._tippy.setContent(newLabel);
         });
         playerControlsLeft.appendChild(repeatButton);
 
         const whStatus = WindhawkComm.query();
 
-        const prevButton = document.querySelector('.player-controls__buttons button[data-testid="control-button-skip-back"]');
-        const nextButton = document.querySelector('.player-controls__buttons button[data-testid="control-button-skip-forward"]');
+        const prevButton = document.querySelector<HTMLButtonElement>('.player-controls__buttons button[data-testid="control-button-skip-back"]');
+        const nextButton = document.querySelector<HTMLButtonElement>('.player-controls__buttons button[data-testid="control-button-skip-forward"]');
         if (prevButton) {
             prevButton.addEventListener('contextmenu', (event) => {
                 Spicetify.Player.seek(Spicetify.Player.getProgress() - 15000);
@@ -59,7 +78,7 @@ class PlayerBar {
                         return;
                     }
                     this.longPressTimer = setTimeout(() => {
-                        nextButton.dataset.fastForward = true;
+                        nextButton.dataset.fastForward = 'true';
                         WindhawkComm.setPlaybackSpeed(5);
                         Spicetify.Player.play();
                     }, 1000);
@@ -92,19 +111,19 @@ class PlayerBar {
         });
         playerControlsLeft.appendChild(stopButton);
 
-        const playerControlsRight = document.querySelector('.player-controls__right');
-        const volumeBar = document.querySelector('.volume-bar');
-        this.volumeButton = volumeBar.querySelector('.volume-bar__icon-button');
-        this.volumeBarProgress = volumeBar.querySelector('.progress-bar, .x-progressBar-progressBar, [data-testid="progress-bar"]');
+        const playerControlsRight = document.querySelector('.player-controls__right')!;
+        const volumeBar = document.querySelector('.volume-bar')!;
+        this.volumeButton = volumeBar.querySelector('.volume-bar__icon-button')!;
+        this.volumeBarProgress = volumeBar.querySelector('.progress-bar, .x-progressBar-progressBar, [data-testid="progress-bar"]')!;
         this.updateVolumeIcon();
         new MutationObserver(this.updateVolumeIcon.bind(this)).observe(this.volumeBarProgress, { attributes: true, attributeFilter: ['style'] });
         playerControlsRight.appendChild(volumeBar);
 
-        const volSlider = document.querySelector('.volume-bar__slider-container');
-        const volPopup = volSlider.children[0];
+        const volSlider = document.querySelector('.volume-bar__slider-container')!;
+        const volPopup = volSlider.children[0] as HTMLElement;
         volSlider.addEventListener('click', () => {
             if (window.innerWidth < 750) {
-                volPopup.dataset.visible = true;
+                volPopup.dataset.visible = 'true';
                 const autoClose = setTimeout(() => {
                     delete volPopup.dataset.visible;
                 }, 5000);
@@ -122,20 +141,20 @@ class PlayerBar {
         this.timeTextContainer.classList.add('wmpotify-time-text-container');
         this.timeText = document.createElement('span');
         this.timeText.classList.add('wmpotify-time-text');
-        this.timeTextMode = parseInt(localStorage.wmpotifyTimeTextMode || 0); // 0: remaining, 1: elapsed, 2: elapsed / total
+        this.timeTextMode = parseInt(localStorage.wmpotifyTimeTextMode || '0'); // 0: remaining, 1: elapsed, 2: elapsed / total
         this.updateTimeText();
-        this.timeText.dataset.mode = this.timeTextMode;
+        this.timeText.dataset.mode = this.timeTextMode.toString();
         this.timeText.addEventListener('click', () => {
             this.timeTextMode = (this.timeTextMode + 1) % 3;
-            this.timeText.dataset.mode = this.timeTextMode;
-            localStorage.wmpotifyTimeTextMode = this.timeTextMode;
+            this.timeText.dataset.mode = this.timeTextMode.toString();
+            localStorage.wmpotifyTimeTextMode = this.timeTextMode.toString();
         });
         this.timeTextContainer.appendChild(this.timeText);
         this.playerBar.insertAdjacentElement('afterbegin', this.timeTextContainer);
         Spicetify.Player.addEventListener("onprogress", this.updateTimeText.bind(this));
 
-        this.titlebar = document.querySelector('#wmpotify-title-bar');
-        this.titleButtons = document.querySelector('#wmpotify-title-buttons');
+        this.titlebar = document.querySelector('#wmpotify-title-bar')!;
+        this.titleButtons = document.querySelector('#wmpotify-title-buttons')!;
         if (this.titlebar) {
             this.updateTimeTextMiniMode();
             window.addEventListener('resize', this.updateTimeTextMiniMode.bind(this));
@@ -145,9 +164,18 @@ class PlayerBar {
             const miniModeButton = new Spicetify.Playbar.Button(
                 Strings['PB_BTN_MINI_MODE'],
                 '', // SVG icon, not needed (image provided in CSS)
-                () => WindowManager.toggleMiniMode()
+                () => {} // onClick, handled manually below to support shift+click
+                // (Spicetify doesn't provide the event object here. Deprecated window.event works but that's dirty)
             );
             miniModeButton.element.id = 'wmpotify-mini-mode-button';
+            // Shift+click to use the original documentPictureInPicture-based PiP mode
+            miniModeButton.element.addEventListener('click', (event) => {
+                if (event.shiftKey) {
+                    document.querySelector<HTMLButtonElement>("button[data-testid='pip-toggle-button']")?.click();
+                } else {
+                    WindowManager.toggleMiniMode();
+                }
+            });
         }
 
         const fullscreenButton = new Spicetify.Playbar.Button(
@@ -162,7 +190,7 @@ class PlayerBar {
         const isCustomTitlebar = !!document.querySelector('#wmpotify-title-bar');
         const whAvailable = WindhawkComm.available();
         const origDefaultTitle = await Spicetify.AppTitle.get();
-        const titlebarText = document.querySelector('#wmpotify-title-text');
+        const titlebarText = document.querySelector('#wmpotify-title-text')!;
 
         const trackInfoWidget = document.querySelector('.main-nowPlayingWidget-trackInfo');
         if (!trackInfoWidget || document.querySelector('.wmpotify-track-info')) {
@@ -256,7 +284,7 @@ class PlayerBar {
     }
 
     updateVolumeIcon() {
-        const volume = getComputedStyle(this.volumeBarProgress).getPropertyValue('--progress-bar-transform').replace('%', '') / 100;
+        const volume = parseInt(getComputedStyle(this.volumeBarProgress).getPropertyValue('--progress-bar-transform').replace('%', '')) / 100;
         if (volume === 0) {
             this.volumeButton.dataset.vol = 'muted';
         } else if (volume <= 0.3) {
@@ -273,7 +301,7 @@ class PlayerBar {
             case 0:
                 {
                     try {
-                        const remaining = Spicetify.Player.data?.item?.metadata?.duration - Spicetify.Player.getProgress();
+                        const remaining = parseInt(Spicetify.Player.data?.item?.metadata?.duration) - Spicetify.Player.getProgress();
                         this.timeText.textContent = formatTime(remaining, true);
                     } catch (e) {
                         // getProgress might fail if some internal Spotify stuff goes wrong (more internal Spotify errors show up in console before WMPotify fail logs)

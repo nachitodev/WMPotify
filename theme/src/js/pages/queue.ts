@@ -93,10 +93,11 @@ export function initQueuePanel() {
     onQueuePanelInit();
     new MutationObserver(onQueuePanelInit).observe(document.querySelector('#queue-panel')!, { childList: true });
 
-    const tabs = document.querySelectorAll('#Desktop_PanelContainer_Id:has(#queue-panel) div[role="tablist"] button');
+    const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('#Desktop_PanelContainer_Id:has(#queue-panel) div[role="tablist"] button'));
     let menuItems: MadMenuItem[] = [];
     let menuObj: CreateMadMenuRes;
-    for (const tab of tabs) {
+    for (const i in tabs) {
+        const tab = tabs[i];
         menuItems.push({
             text: tab.textContent,
             click: function (this: HTMLElement, event: Event) {
@@ -107,7 +108,14 @@ export function initQueuePanel() {
                     menuItem.classList.remove('activeStyle');
                 }
                 this.classList.add('activeStyle');
-                (tab as HTMLElement).click();
+                if (document.body.contains(tab)) {
+                    tab.click();
+                } else {
+                    const refreshedTabs = document.querySelectorAll<HTMLButtonElement>('#Desktop_PanelContainer_Id:has(#queue-panel) div[role="tablist"] button');
+                    if (refreshedTabs[i]) {
+                        refreshedTabs[i].click();
+                    }
+                }
             }
         });
     }
