@@ -3,9 +3,19 @@
 import Strings from '../strings'
 import WindhawkComm from "../utils/WindhawkComm";
 import { openUpdateDialog } from '../ui/dialogs';
+import { currentVersion } from './ver';
 
-const verString = '1.2.6 Pre-release (2026/03/22)';
 export let lastSupportedSpotifyVer = '1.2.85';
+
+interface StructuredMadVersion {
+    major: number;
+    minor: number;
+    patch: number;
+    isPreRelease: boolean;
+    buildDate: string;
+    rcNum?: number | null;
+    extra?: string | null;
+}
 
 export class MadVersion {
     major: number;
@@ -13,13 +23,26 @@ export class MadVersion {
     patch: number;
     extra: string;
 
-    constructor(ver: string) {
-        const split = ver.split(" ");
-        const verSplit = split[0].split(".");
-        this.major = parseInt(verSplit[0]);
-        this.minor = parseInt(verSplit[1]);
-        this.patch = parseInt(verSplit[2]) || 0;
-        this.extra = split.length === 1 ? "" : split.slice(1).join(" ");
+    constructor(ver: string | StructuredMadVersion) {
+        if (typeof ver === "string") {
+            const split = ver.split(" ");
+            const verSplit = split[0].split(".");
+            this.major = parseInt(verSplit[0]);
+            this.minor = parseInt(verSplit[1]);
+            this.patch = parseInt(verSplit[2]) || 0;
+            this.extra = split.length === 1 ? "" : split.slice(1).join(" ");
+        } else {
+            this.major = ver.major;
+            this.minor = ver.minor;
+            this.patch = ver.patch;
+            if (ver.rcNum) {
+                this.extra = `Release Candidate ${ver.rcNum}`;
+            } else if (ver.isPreRelease) {
+                this.extra = "Pre-release" + (ver.buildDate ? ` (${ver.buildDate})` : "");
+            } else {
+                this.extra = ver.extra || "";
+            }
+        }
     }
 
     toString(level: number): string {
@@ -65,7 +88,7 @@ export class MadVersion {
     }
 }
 
-export const ver = new MadVersion(verString);
+export const ver = new MadVersion(currentVersion);
 
 export async function checkUpdates() {
     try {

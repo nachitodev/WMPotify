@@ -4,7 +4,7 @@ import Strings from '../strings';
 import { compareSpotifyVersion, ver, lastSupportedSpotifyVer } from '../utils/UpdateCheck';
 import WindhawkComm from "../utils/WindhawkComm";
 
-export function confirmModal(title = "WMPotify", message, confirmText = Strings['UI_OK'], cancelText = Strings['UI_CANCEL']) {
+export function confirmModal(title: string, message: string, confirmText = Strings['UI_OK'], cancelText = Strings['UI_CANCEL']) {
     return new Promise((resolve, reject) => {
         const modalContent = document.createElement('div');
         modalContent.id = 'wmpotify-confirm-modal';
@@ -48,7 +48,7 @@ export function confirmModal(title = "WMPotify", message, confirmText = Strings[
     });
 }
 
-export function promptModal(title = "WMPotify", message, text, hint) {
+export function promptModal(title: string, message: string, text: string, hint: string = "") {
     return new Promise((resolve, reject) => {
         const modalContent = document.createElement('div');
         modalContent.id = 'wmpotify-prompt-modal';
@@ -311,7 +311,7 @@ export function diagDialog() {
 function getDiagInfo() {
     const isSupportedSpotify = compareSpotifyVersion('1.2.45') >= 0 && compareSpotifyVersion(lastSupportedSpotifyVer) <= 0;
     return `
-        <p>${Strings.getString('ERRDLG_VERSION', 'Spotify')}: ${Spicetify.Platform?.version || navigator.userAgent.match(/Spotify\/\d+\.\d+\.\d+/)?.[1] || Strings['ERRDLG_UNKNOWN']} (${isSupportedSpotify ? Strings['ERRDLG_SUPPORTED'] : Strings['ERRDLG_UNSUPPORTED']})</p>
+        <p>${Strings.getString('ERRDLG_VERSION', 'Spotify')}: ${Spicetify.Platform?.version || navigator.userAgent.match(/Spotify\/(\d+\.\d+\.\d+\.\d+)/)?.[1] || Strings['ERRDLG_UNKNOWN']} (${isSupportedSpotify ? Strings['ERRDLG_SUPPORTED'] : Strings['ERRDLG_UNSUPPORTED']})</p>
         <p>${Strings.getString('ERRDLG_VERSION', 'Spicetify')}: ${Spicetify.Config.version || Strings['ERRDLG_UNKNOWN']}</p>
         <p>${Strings.getString('ERRDLG_VERSION', 'Spicetify Marketplace')}: ${window.Marketplace?.version || Strings['ERRDLG_UNKNOWN']}</p>
         <p>${Strings.getString('ERRDLG_UA')}: ${navigator.userAgent}</p>
